@@ -2,4 +2,11 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.examRoute = void 0;
 const express_1 = require("express");
+const userController_1 = require("../controllers/userController");
 exports.examRoute = (0, express_1.Router)();
+// examRoute.options('/getAll', cors(whitelist.clientOptionsGlobal));
+exports.examRoute.post('/createUser', userController_1.createUserController);
+exports.examRoute.get('/getAll', userController_1.getAllUserController);
+exports.examRoute.get('/getId/:id', userController_1.getUserByIdController);
+exports.examRoute.put('/updateUser/:id', userController_1.updateUserController);
+exports.examRoute.delete('/deleteUser/:id', userController_1.deleteUserController);

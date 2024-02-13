@@ -9,34 +9,55 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.updateUser = exports.getUserById = exports.getAllUser = exports.createUser = void 0;
-function createUser(req, res) {
+exports.deleteUserController = exports.updateUserController = exports.getUserByIdController = exports.getAllUserController = exports.createUserController = void 0;
+const userService_1 = require("../services/userService");
+function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('create');
+        const { username, email, password } = req.body;
+        try {
+            const user = yield (0, userService_1.createUserService)(email, username, password);
+            if (user) {
+                res.status(201).json({
+                    message: 'Create User success',
+                    data: user,
+                });
+            }
+            else {
+                res.status(409).json({
+                    message: 'Username already exist',
+                    data: user,
+                });
+            }
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     });
 }
-exports.createUser = createUser;
-function getAllUser(req, res) {
+exports.createUserController = createUserController;
+function getAllUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('get all');
+        res.send('get all');
     });
 }
-exports.getAllUser = getAllUser;
-function getUserById(req, res) {
+exports.getAllUserController = getAllUserController;
+function getUserByIdController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('get id');
+        res.send(`get id ${req.params.id}`);
     });
 }
-exports.getUserById = getUserById;
-function updateUser(req, res) {
+exports.getUserByIdController = getUserByIdController;
+function updateUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('update');
+        res.send(`update ${req.params.id}`);
     });
 }
-exports.updateUser = updateUser;
-function deleteUser(req, res) {
+exports.updateUserController = updateUserController;
+function deleteUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('delete');
+        res.send(`delete ${req.params.id}`);
     });
 }
-exports.deleteUser = deleteUser;
+exports.deleteUserController = deleteUserController;

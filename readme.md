@@ -4,9 +4,11 @@ nodejs installed (preferably LTS version)
 terminal / VSCode for ease of use
 
 migration
+cd src
 npx sequelize-cli db:migrate
 
 seeding data
+cd src
 npx sequelize-cli db:seed:all
 
 running project

@@ -1,23 +1,47 @@
 import { Request, Response } from "express"
 
-async function createUser(req: Request, res: Response) {
-  console.log('create')
+import { createUserService } from "../services/userService";
+
+async function createUserController(req: Request, res: Response) {
+  const { username, email, password } = req.body;
+
+  try {
+
+      const user = await createUserService(email, username, password);
+
+      if (user) {
+          res.status(201).json({
+              message: 'Create User success',
+              data: user,
+          });
+      } else {
+          res.status(409).json({
+              message: 'Username already exist',
+              data: user,
+          });
+      }
+
+  } catch (error: any) {
+      res.status(500).json({
+          message: error.message
+      });
+  }
 }
 
-async function getAllUser(req: Request, res: Response) {
-  console.log('get all')
+async function getAllUserController(req: Request, res: Response) {
+  res.send('get all')
 }
 
-async function getUserById(req: Request, res: Response) {
-  console.log('get id')
+async function getUserByIdController(req: Request, res: Response) {
+  res.send(`get id ${req.params.id}`)
 }
 
-async function updateUser(req: Request, res: Response) {
-  console.log('update')
+async function updateUserController(req: Request, res: Response) {
+  res.send(`update ${req.params.id}`)
 }
 
-async function deleteUser(req: Request, res: Response) {
-  console.log('delete')
+async function deleteUserController(req: Request, res: Response) {
+  res.send(`delete ${req.params.id}`)
 }
 
-export { createUser, getAllUser, getUserById, updateUser, deleteUser }
+export { createUserController, getAllUserController, getUserByIdController, updateUserController, deleteUserController }
