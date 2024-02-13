@@ -54,7 +54,7 @@ async function getUserDao(userId: number): Promise<any> {
 async function updateUserDao(username: string, email: string, password: string | undefined, userId: number): Promise<any> {
     const currentDate = new Date();
     try {
-        const [, [user]] = await User.update(
+        const result = await User.update(
             {
               user_name: username,
               user_email: email,
@@ -63,17 +63,23 @@ async function updateUserDao(username: string, email: string, password: string |
             },
             {
               where: {
-                is_deleted: 0,
+                is_deleted:  0,
                 user_id: userId,
               },
-              returning: true, // Include the updated rows in the result
+              returning: true,
             }
           );
-      
-          return user;
+          
+        if (result && Array.isArray(result) && result.length >  1 && result[1].length >  0) {
+            const user = result[1][0];
+            return user;
+        } else {
+            throw new Error('No user updated');
+        }
     } catch (error: any) {
         throw new Error(error.message.replace('Validation error: ', ''));
     }
+    
 }
 
 async function deleteUserDao(userId: number): Promise<any> {
