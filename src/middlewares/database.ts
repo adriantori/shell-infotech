@@ -10,7 +10,10 @@ interface CustomRequest extends Request {
 const dbUri = POSTGRES_URI || 'postgresql://user:password@localhost:5432/your_database';
 
 // Create Sequelize instance using the URI and options
-const sequelize = new Sequelize(dbUri);
+const sequelize = new Sequelize(dbUri, {
+  dialect: 'postgres',
+  dialectModule: require('pg')
+});
 
 // Middleware function to attach the Sequelize instance to the request object
 const attachDB = (req: CustomRequest, res: Response, next: NextFunction): void => {
