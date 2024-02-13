@@ -2,10 +2,10 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "backend for shell infotech user test",
-  "main": "app.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node dist/app.js",
+    "start": "node dist/index.js",
     "runs": "concurrently \"npx tsc --watch\" \"nodemon -q dist/app.js\""
   },
   "author": "Adri Antori",

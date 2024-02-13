@@ -4,6 +4,7 @@
     "password": "shellinfotech123",
     "database": "postgres",
     "host": "aws-0-ap-southeast-1.pooler.supabase.com",
-    "dialect": "postgres"
+    "dialect": "postgres",
+    "dialectModule": "pg"
   }
 }
