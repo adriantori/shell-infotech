@@ -19,4 +19,3 @@ app.use(examRoute_1.examRoute);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
 });
-exports.default = app;
