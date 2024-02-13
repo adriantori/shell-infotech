@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { UpdateOptions } from "sequelize";
 import User from "../models/userModel";
 
 async function createUserDao(username: string, email: string, password: string): Promise<any> {
@@ -83,22 +83,29 @@ async function updateUserDao(username: string, email: string, password: string |
 }
 
 async function deleteUserDao(userId: number): Promise<any> {
-    const currentDate = new Date();
-    try {
-        const user = await User.update({
-            is_deleted: 1,
-            updatedAt: currentDate,
+  const currentDate = new Date();
+  try {
+    const [affectedRows] = await User.update(
+      {
+        is_deleted: 1,
+        updatedAt: currentDate,
+      },
+      {
+        where: {
+          user_id: userId,
         },
-            {
-                where: {
-                    user_id: userId
-                }
-            });
+        returning: true, // Include the updated rows in the result
+      } as UpdateOptions
+    );
 
-        return user;
-    } catch (error: any) {
-        throw new Error(error.message.replace('Validation error: ', ''));
+    if (affectedRows > 0) {
+      return { is_deleted: 1, updatedAt: currentDate }; // Adjust the return value as needed
+    } else {
+      throw new Error('No user deleted');
     }
+  } catch (error: any) {
+    throw new Error(error.message.replace('Validation error: ', ''));
+  }
 }
 
 async function undeleteUserDao(userId: number): Promise<any> {
