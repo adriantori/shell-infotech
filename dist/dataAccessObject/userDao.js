@@ -74,7 +74,7 @@ function updateUserDao(username, email, password, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const currentDate = new Date();
         try {
-            const [, [user]] = yield userModel_1.default.update({
+            const result = yield userModel_1.default.update({
                 user_name: username,
                 user_email: email,
                 user_pass: password,
@@ -84,9 +84,15 @@ function updateUserDao(username, email, password, userId) {
                     is_deleted: 0,
                     user_id: userId,
                 },
-                returning: true, // Include the updated rows in the result
+                returning: true,
             });
-            return user;
+            if (result && Array.isArray(result) && result.length > 1 && result[1].length > 0) {
+                const user = result[1][0];
+                return user;
+            }
+            else {
+                throw new Error('No user updated');
+            }
         }
         catch (error) {
             throw new Error(error.message.replace('Validation error: ', ''));
