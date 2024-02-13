@@ -51,18 +51,40 @@ async function getUserDao(userId: number): Promise<any> {
     }
 }
 
-async function updateUserDao(username: string, email: string, password: string, userId: number): Promise<any> {
+async function updateUserDao(username: string, email: string, password: string | undefined, userId: number): Promise<any> {
+    const currentDate = new Date();
+    try {
+        const [, [user]] = await User.update(
+            {
+              user_name: username,
+              user_email: email,
+              user_pass: password,
+              updatedAt: currentDate,
+            },
+            {
+              where: {
+                is_deleted: 0,
+                user_id: userId,
+              },
+              returning: true, // Include the updated rows in the result
+            }
+          );
+      
+          return user;
+    } catch (error: any) {
+        throw new Error(error.message.replace('Validation error: ', ''));
+    }
+}
+
+async function deleteUserDao(userId: number): Promise<any> {
     const currentDate = new Date();
     try {
         const user = await User.update({
-            user_name: username,
-            user_email: email,
-            user_pass: password,
+            is_deleted: 1,
             updatedAt: currentDate,
         },
             {
                 where: {
-                    is_deleted: 0,
                     user_id: userId
                 }
             });
@@ -74,4 +96,4 @@ async function updateUserDao(username: string, email: string, password: string, 
 }
 
 
-export { createUserDao, getAllUserDao, getUserDao, updateUserDao }
+export { createUserDao, getAllUserDao, getUserDao, updateUserDao, deleteUserDao }

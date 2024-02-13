@@ -33,9 +33,14 @@ async function getUserService(userId: number) {
   }
 }
 
-async function updateUserService(username: string, email: string, password: string, userId: number) {
+async function updateUserService(username: string, email: string, password: string | undefined, userId: number) {
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
+    let hashedPassword
+
+    if (typeof password === 'string') {
+      // Hash the password if it is provided
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
 
     const user = await updateUserDao(username, email, hashedPassword, userId);
     return user;
@@ -43,5 +48,6 @@ async function updateUserService(username: string, email: string, password: stri
     throw new Error(error.message);
   }
 }
+
 
 export { createUserService, getAllUserService, getUserService, updateUserService }

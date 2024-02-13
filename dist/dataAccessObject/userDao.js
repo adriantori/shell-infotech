@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserDao = exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
+exports.deleteUserDao = exports.updateUserDao = exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 function createUserDao(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -74,7 +74,7 @@ function updateUserDao(username, email, password, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const currentDate = new Date();
         try {
-            const user = yield userModel_1.default.update({
+            const [, [user]] = yield userModel_1.default.update({
                 user_name: username,
                 user_email: email,
                 user_pass: password,
@@ -82,6 +82,27 @@ function updateUserDao(username, email, password, userId) {
             }, {
                 where: {
                     is_deleted: 0,
+                    user_id: userId,
+                },
+                returning: true, // Include the updated rows in the result
+            });
+            return user;
+        }
+        catch (error) {
+            throw new Error(error.message.replace('Validation error: ', ''));
+        }
+    });
+}
+exports.updateUserDao = updateUserDao;
+function deleteUserDao(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const currentDate = new Date();
+        try {
+            const user = yield userModel_1.default.update({
+                is_deleted: 1,
+                updatedAt: currentDate,
+            }, {
+                where: {
                     user_id: userId
                 }
             });
@@ -92,4 +113,4 @@ function updateUserDao(username, email, password, userId) {
         }
     });
 }
-exports.updateUserDao = updateUserDao;
+exports.deleteUserDao = deleteUserDao;

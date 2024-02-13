@@ -55,7 +55,11 @@ exports.getUserService = getUserService;
 function updateUserService(username, email, password, userId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+            let hashedPassword;
+            if (typeof password === 'string') {
+                // Hash the password if it is provided
+                hashedPassword = yield bcrypt_1.default.hash(password, 10);
+            }
             const user = yield (0, userDao_1.updateUserDao)(username, email, hashedPassword, userId);
             return user;
         }
