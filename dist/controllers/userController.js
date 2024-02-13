@@ -39,7 +39,18 @@ function createUserController(req, res) {
 exports.createUserController = createUserController;
 function getAllUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.send('get all');
+        try {
+            const users = yield (0, userService_1.getAllUserService)();
+            res.status(200).json({
+                message: 'Users retrieved successfully',
+                data: users,
+            });
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     });
 }
 exports.getAllUserController = getAllUserController;

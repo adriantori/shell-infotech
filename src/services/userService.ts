@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { createUserDao } from '../dataAccessObject/userDao';
+import { createUserDao, getAllUserDao } from '../dataAccessObject/userDao';
 
 async function createUserService(username: string, email: string, password: string) {
   try {
@@ -13,4 +13,14 @@ async function createUserService(username: string, email: string, password: stri
   }
 }
 
-export { createUserService }
+async function getAllUserService() {
+  try {
+
+      const users = await getAllUserDao();
+      return users;
+  } catch (error: any) {
+      throw new Error(error.message);
+  }
+}
+
+export { createUserService, getAllUserService }

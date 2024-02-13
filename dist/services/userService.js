@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserService = void 0;
+exports.getAllUserService = exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDao_1 = require("../dataAccessObject/userDao");
 function createUserService(username, email, password) {
@@ -28,3 +28,15 @@ function createUserService(username, email, password) {
     });
 }
 exports.createUserService = createUserService;
+function getAllUserService() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const users = yield (0, userDao_1.getAllUserDao)();
+            return users;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    });
+}
+exports.getAllUserService = getAllUserService;

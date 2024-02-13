@@ -10,6 +10,21 @@ async function createUserDao( username: string, email: string, password: string)
           user_pass: password,
           createdAt: currentDate, 
           updatedAt: currentDate,
+          is_deleted: 0
+      });
+
+      return user;
+  } catch (error: any) {
+      throw new Error(error.message.replace('Validation error: ', ''));
+  }
+}
+async function getAllUserDao(): Promise<any> {
+    const currentDate = new Date();
+  try {
+      const user = await User.findAll({
+        where: {
+            is_deleted: 0,
+        }
       });
 
       return user;
@@ -19,4 +34,4 @@ async function createUserDao( username: string, email: string, password: string)
 }
 
 
-export { createUserDao }
+export { createUserDao, getAllUserDao }

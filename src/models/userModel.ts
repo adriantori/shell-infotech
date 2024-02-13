@@ -8,6 +8,7 @@ interface UserAttributes {
   user_pass: string;
   createdAt?: Date;
   updatedAt?: Date;
+  is_deleted: number;
 }
 
 interface UserCreationAttributes extends Optional<UserAttributes, 'user_id'> {}
@@ -17,8 +18,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public user_email!: string;
   public user_name!: string;
   public user_pass!: string;
-  public createdAt?: Date; // Define createdAt field
-  public updatedAt?: Date; // Define updatedAt field
+  public createdAt?: Date;
+  public updatedAt?: Date;
+  public is_deleted!: number
 
   // Define a custom validation method
   public async validateUsername(username: string): Promise<string | undefined> {
@@ -59,11 +61,15 @@ User.init(
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: true, // You can set allowNull based on your requirements
+      allowNull: true,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: true, // You can set allowNull based on your requirements
+      allowNull: true,
+    },
+    is_deleted: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
     },
   },
   {

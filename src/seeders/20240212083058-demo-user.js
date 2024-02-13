@@ -17,6 +17,7 @@ module.exports = {
         user_pass: hashedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
+        is_deleted: 0
       };
     });
 

@@ -53,11 +53,15 @@ User.init({
     },
     createdAt: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // You can set allowNull based on your requirements
+        allowNull: true,
     },
     updatedAt: {
         type: sequelize_1.DataTypes.DATE,
-        allowNull: true, // You can set allowNull based on your requirements
+        allowNull: true,
+    },
+    is_deleted: {
+        type: sequelize_1.DataTypes.INTEGER,
+        allowNull: false,
     },
 }, {
     sequelize: database_1.sequelize,
