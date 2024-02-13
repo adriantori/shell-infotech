@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
+exports.updateUserDao = exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 function createUserDao(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -36,12 +36,14 @@ function createUserDao(username, email, password) {
 exports.createUserDao = createUserDao;
 function getAllUserDao() {
     return __awaiter(this, void 0, void 0, function* () {
-        const currentDate = new Date();
         try {
             const users = yield userModel_1.default.findAll({
                 where: {
                     is_deleted: 0
-                }
+                },
+                order: [
+                    ['user_id', 'ASC']
+                ]
             });
             return users;
         }
@@ -53,7 +55,6 @@ function getAllUserDao() {
 exports.getAllUserDao = getAllUserDao;
 function getUserDao(userId) {
     return __awaiter(this, void 0, void 0, function* () {
-        const currentDate = new Date();
         try {
             const user = yield userModel_1.default.findAll({
                 where: {
@@ -69,3 +70,26 @@ function getUserDao(userId) {
     });
 }
 exports.getUserDao = getUserDao;
+function updateUserDao(username, email, password, userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const currentDate = new Date();
+        try {
+            const user = yield userModel_1.default.update({
+                user_name: username,
+                user_email: email,
+                user_pass: password,
+                updatedAt: currentDate,
+            }, {
+                where: {
+                    is_deleted: 0,
+                    user_id: userId
+                }
+            });
+            return user;
+        }
+        catch (error) {
+            throw new Error(error.message.replace('Validation error: ', ''));
+        }
+    });
+}
+exports.updateUserDao = updateUserDao;

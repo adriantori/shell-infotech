@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserService = exports.getAllUserService = exports.createUserService = void 0;
+exports.updateUserService = exports.getUserService = exports.getAllUserService = exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDao_1 = require("../dataAccessObject/userDao");
 function createUserService(username, email, password) {
@@ -52,3 +52,16 @@ function getUserService(userId) {
     });
 }
 exports.getUserService = getUserService;
+function updateUserService(username, email, password, userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const hashedPassword = yield bcrypt_1.default.hash(password, 10);
+            const user = yield (0, userDao_1.updateUserDao)(username, email, hashedPassword, userId);
+            return user;
+        }
+        catch (error) {
+            throw new Error(error.message);
+        }
+    });
+}
+exports.updateUserService = updateUserService;

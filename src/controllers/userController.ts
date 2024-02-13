@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 
-import { createUserService, getAllUserService, getUserService } from "../services/userService";
+import { createUserService, getAllUserService, getUserService, updateUserService } from "../services/userService";
 
 async function createUserController(req: Request, res: Response) {
   const { username, email, password } = req.body;
@@ -63,7 +63,26 @@ async function getUserByIdController(req: Request, res: Response) {
 }
 
 async function updateUserController(req: Request, res: Response) {
-  res.send(`update ${req.params.id}`)
+  const { username, email, password } = req.body;
+  const userId = parseInt(req.params.id);
+
+  try {
+    const user = await updateUserService(username, email, password, userId);
+
+    if (user) {
+      res.status(200).json({
+        message: 'Update User success'
+      });
+    } else {
+      res.status(200).json({
+        message: 'ID does not exist'
+      });
+    }
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 }
 
 async function deleteUserController(req: Request, res: Response) {

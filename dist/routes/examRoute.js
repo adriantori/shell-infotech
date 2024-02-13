@@ -8,5 +8,5 @@ exports.examRoute = (0, express_1.Router)();
 exports.examRoute.post('/createUser', userController_1.createUserController);
 exports.examRoute.get('/getAll', userController_1.getAllUserController);
 exports.examRoute.get('/getId/:id', userController_1.getUserByIdController);
-exports.examRoute.put('/updateUser/:id', userController_1.updateUserController);
+exports.examRoute.patch('/updateUser/:id', userController_1.updateUserController);
 exports.examRoute.delete('/deleteUser/:id', userController_1.deleteUserController);

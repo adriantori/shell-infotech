@@ -11,5 +11,5 @@ export const examRoute = Router();
 examRoute.post('/createUser', createUserController);
 examRoute.get('/getAll', getAllUserController);
 examRoute.get('/getId/:id', getUserByIdController);
-examRoute.put('/updateUser/:id', updateUserController);
+examRoute.patch('/updateUser/:id', updateUserController);
 examRoute.delete('/deleteUser/:id', deleteUserController);

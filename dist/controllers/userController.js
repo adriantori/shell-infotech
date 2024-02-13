@@ -83,7 +83,26 @@ function getUserByIdController(req, res) {
 exports.getUserByIdController = getUserByIdController;
 function updateUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.send(`update ${req.params.id}`);
+        const { username, email, password } = req.body;
+        const userId = parseInt(req.params.id);
+        try {
+            const user = yield (0, userService_1.updateUserService)(username, email, password, userId);
+            if (user) {
+                res.status(200).json({
+                    message: 'Update User success'
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'ID does not exist'
+                });
+            }
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     });
 }
 exports.updateUserController = updateUserController;
