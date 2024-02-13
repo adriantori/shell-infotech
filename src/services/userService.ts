@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 
-import { createUserDao, getAllUserDao, getUserDao, updateUserDao } from '../dataAccessObject/userDao';
+import { createUserDao, deleteUserDao, getAllUserDao, getUserDao, undeleteUserDao, updateUserDao } from '../dataAccessObject/userDao';
 
 async function createUserService(username: string, email: string, password: string) {
   try {
@@ -49,5 +49,25 @@ async function updateUserService(username: string, email: string, password: stri
   }
 }
 
+async function deleteUserService(userId: number) {
+  try {
 
-export { createUserService, getAllUserService, getUserService, updateUserService }
+    const user = await deleteUserDao(userId);
+    return user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+async function undeleteUserService(userId: number) {
+  try {
+
+    const user = await undeleteUserDao(userId);
+    return user;
+  } catch (error: any) {
+    throw new Error(error.message);
+  }
+}
+
+
+export { createUserService, getAllUserService, getUserService, updateUserService, deleteUserService, undeleteUserService }

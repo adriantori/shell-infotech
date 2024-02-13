@@ -10,3 +10,4 @@ exports.examRoute.get('/getAll', userController_1.getAllUserController);
 exports.examRoute.get('/getId/:id', userController_1.getUserByIdController);
 exports.examRoute.patch('/updateUser/:id', userController_1.updateUserController);
 exports.examRoute.delete('/deleteUser/:id', userController_1.deleteUserController);
+exports.examRoute.patch('/undeleteUser/:id', userController_1.undeleteUserController);

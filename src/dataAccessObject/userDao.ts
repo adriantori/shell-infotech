@@ -95,5 +95,24 @@ async function deleteUserDao(userId: number): Promise<any> {
     }
 }
 
+async function undeleteUserDao(userId: number): Promise<any> {
+    const currentDate = new Date();
+    try {
+        const user = await User.update({
+            is_deleted: 0,
+            updatedAt: currentDate,
+        },
+            {
+                where: {
+                    user_id: userId
+                }
+            });
 
-export { createUserDao, getAllUserDao, getUserDao, updateUserDao, deleteUserDao }
+        return user;
+    } catch (error: any) {
+        throw new Error(error.message.replace('Validation error: ', ''));
+    }
+}
+
+
+export { createUserDao, getAllUserDao, getUserDao, updateUserDao, deleteUserDao, undeleteUserDao }

@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserDao = exports.updateUserDao = exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
+exports.undeleteUserDao = exports.deleteUserDao = exports.updateUserDao = exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 function createUserDao(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -114,3 +114,23 @@ function deleteUserDao(userId) {
     });
 }
 exports.deleteUserDao = deleteUserDao;
+function undeleteUserDao(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const currentDate = new Date();
+        try {
+            const user = yield userModel_1.default.update({
+                is_deleted: 0,
+                updatedAt: currentDate,
+            }, {
+                where: {
+                    user_id: userId
+                }
+            });
+            return user;
+        }
+        catch (error) {
+            throw new Error(error.message.replace('Validation error: ', ''));
+        }
+    });
+}
+exports.undeleteUserDao = undeleteUserDao;

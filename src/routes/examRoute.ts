@@ -1,6 +1,6 @@
 import { Router } from "express";
 import cors from "cors";
-import { createUserController, getAllUserController, getUserByIdController, updateUserController, deleteUserController } from "../controllers/userController";
+import { createUserController, getAllUserController, getUserByIdController, updateUserController, deleteUserController, undeleteUserController } from "../controllers/userController";
 import whitelist from "../middlewares/whitelist";
 
 
@@ -13,3 +13,4 @@ examRoute.get('/getAll', getAllUserController);
 examRoute.get('/getId/:id', getUserByIdController);
 examRoute.patch('/updateUser/:id', updateUserController);
 examRoute.delete('/deleteUser/:id', deleteUserController);
+examRoute.patch('/undeleteUser/:id', undeleteUserController);

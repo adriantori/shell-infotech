@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserController = exports.updateUserController = exports.getUserByIdController = exports.getAllUserController = exports.createUserController = void 0;
+exports.undeleteUserController = exports.deleteUserController = exports.updateUserController = exports.getUserByIdController = exports.getAllUserController = exports.createUserController = void 0;
 const userService_1 = require("../services/userService");
 function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -108,7 +108,49 @@ function updateUserController(req, res) {
 exports.updateUserController = updateUserController;
 function deleteUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.send(`delete ${req.params.id}`);
+        const userId = parseInt(req.params.id);
+        try {
+            const user = yield (0, userService_1.deleteUserService)(userId);
+            if (user) {
+                res.status(200).json({
+                    message: 'Delete User success'
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'ID does not exist'
+                });
+            }
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     });
 }
 exports.deleteUserController = deleteUserController;
+function undeleteUserController(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userId = parseInt(req.params.id);
+        try {
+            const user = yield (0, userService_1.undeleteUserService)(userId);
+            if (user) {
+                res.status(200).json({
+                    message: 'Restore User success'
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'ID does not exist'
+                });
+            }
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
+    });
+}
+exports.undeleteUserController = undeleteUserController;
