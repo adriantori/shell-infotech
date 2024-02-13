@@ -6,6 +6,7 @@ const sequelizer = new sequelize_1.Sequelize({
     password: "shellinfotech123",
     database: "postgres",
     host: "aws-0-ap-southeast-1.pooler.supabase.com",
-    dialect: "postgres"
+    dialect: "postgres",
+    dialectModules: pg
 });
 exports.default = sequelizer;
