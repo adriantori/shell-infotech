@@ -1,10 +1,7 @@
 // getUserByIdController.test.ts
 import { Request, Response } from 'express';
 import { getUserByIdController } from '../../../controllers/userController'; // Update this with your actual controller path
-import { getUserService } from '../../../services/userService'; // Update this with your actual service path
-
-// Mock the service
-jest.mock('../../../services/userService'); // Update this with your actual service path
+import * as userService from '../../../services/userService'; // Update this with your actual service path
 
 describe('getUserByIdController', () => {
   const mockRequest = {
@@ -23,21 +20,23 @@ describe('getUserByIdController', () => {
   });
 
   it('should retrieve user successfully when user exists', async () => {
-    // Mock the getUserService to return a user
-    (getUserService as jest.Mock).mockResolvedValueOnce([{ /* mocked user data */ }]);
+    const mockUser = [{ /* mocked user data */ }];
+    const spyOnGetUserService = jest.spyOn(userService, 'getUserService').mockResolvedValueOnce(mockUser);
 
     await getUserByIdController(mockRequest, mockResponse);
 
     expect(mockResponse.status).toHaveBeenCalledWith(200);
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'User retrieved successfully',
-      data: [{ /* mocked user data */ }],
+      data: mockUser,
     });
+
+    // Restore the original function after the test
+    spyOnGetUserService.mockRestore();
   });
 
   it('should handle case when user does not exist', async () => {
-    // Mock the getUserService to return an empty array
-    (getUserService as jest.Mock).mockResolvedValueOnce([]);
+    const spyOnGetUserService = jest.spyOn(userService, 'getUserService').mockResolvedValueOnce([]);
 
     await getUserByIdController(mockRequest, mockResponse);
 
@@ -45,11 +44,14 @@ describe('getUserByIdController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'User does not exist',
     });
+
+    // Restore the original function after the test
+    spyOnGetUserService.mockRestore();
   });
 
   it('should handle internal server error', async () => {
-    // Mock the getUserService to throw an error
-    (getUserService as jest.Mock).mockRejectedValueOnce(new Error('Internal Server Error'));
+    const mockError = new Error('Internal Server Error');
+    const spyOnGetUserService = jest.spyOn(userService, 'getUserService').mockRejectedValueOnce(mockError);
 
     await getUserByIdController(mockRequest, mockResponse);
 
@@ -57,5 +59,8 @@ describe('getUserByIdController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Internal Server Error',
     });
+
+    // Restore the original function after the test
+    spyOnGetUserService.mockRestore();
   });
 });

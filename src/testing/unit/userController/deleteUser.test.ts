@@ -1,10 +1,7 @@
 // deleteUserController.test.ts
 import { Request, Response } from 'express';
 import { deleteUserController } from '../../../controllers/userController'; // Update this with your actual controller path
-import { deleteUserService } from '../../../services/userService'; // Update this with your actual service path
-
-// Mock the service
-jest.mock('../../../services/userService'); // Update this with your actual service path
+import * as userService from '../../../services/userService'; // Update this with your actual service path
 
 describe('deleteUserController', () => {
   const mockRequest = {
@@ -23,8 +20,8 @@ describe('deleteUserController', () => {
   });
 
   it('should delete user successfully when ID exists', async () => {
-    // Mock the deleteUserService to return a user
-    (deleteUserService as jest.Mock).mockResolvedValueOnce({ /* mocked user data */ });
+    const mockUser = { /* mocked user data */ };
+    const spyOnDeleteUserService = jest.spyOn(userService, 'deleteUserService').mockResolvedValueOnce(mockUser);
 
     await deleteUserController(mockRequest, mockResponse);
 
@@ -32,11 +29,13 @@ describe('deleteUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Delete User success',
     });
+
+    // Restore the original function after the test
+    spyOnDeleteUserService.mockRestore();
   });
 
   it('should handle case when ID does not exist', async () => {
-    // Mock the deleteUserService to return null
-    (deleteUserService as jest.Mock).mockResolvedValueOnce(null);
+    const spyOnDeleteUserService = jest.spyOn(userService, 'deleteUserService').mockResolvedValueOnce(null);
 
     await deleteUserController(mockRequest, mockResponse);
 
@@ -44,11 +43,14 @@ describe('deleteUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'ID does not exist',
     });
+
+    // Restore the original function after the test
+    spyOnDeleteUserService.mockRestore();
   });
 
   it('should handle internal server error', async () => {
-    // Mock the deleteUserService to throw an error
-    (deleteUserService as jest.Mock).mockRejectedValueOnce(new Error('Internal Server Error'));
+    const mockError = new Error('Internal Server Error');
+    const spyOnDeleteUserService = jest.spyOn(userService, 'deleteUserService').mockRejectedValueOnce(mockError);
 
     await deleteUserController(mockRequest, mockResponse);
 
@@ -56,5 +58,8 @@ describe('deleteUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Internal Server Error',
     });
+
+    // Restore the original function after the test
+    spyOnDeleteUserService.mockRestore();
   });
 });

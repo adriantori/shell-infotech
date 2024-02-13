@@ -1,10 +1,7 @@
 // updateUserController.test.ts
 import { Request, Response } from 'express';
 import { updateUserController } from '../../../controllers/userController'; // Update this with your actual controller path
-import { updateUserService } from '../../../services/userService'; // Update this with your actual service path
-
-// Mock the service
-jest.mock('../../../services/userService'); // Update this with your actual service path
+import * as userService from '../../../services/userService'; // Update this with your actual service path
 
 describe('updateUserController', () => {
   const mockRequest = {
@@ -28,8 +25,8 @@ describe('updateUserController', () => {
   });
 
   it('should update user successfully when ID exists', async () => {
-    // Mock the updateUserService to return a user
-    (updateUserService as jest.Mock).mockResolvedValueOnce({ /* mocked user data */ });
+    const mockUser = { /* mocked user data */ };
+    const spyOnUpdateUserService = jest.spyOn(userService, 'updateUserService').mockResolvedValueOnce(mockUser);
 
     await updateUserController(mockRequest, mockResponse);
 
@@ -37,11 +34,13 @@ describe('updateUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Update User success',
     });
+
+    // Restore the original function after the test
+    spyOnUpdateUserService.mockRestore();
   });
 
   it('should handle case when ID does not exist', async () => {
-    // Mock the updateUserService to return null
-    (updateUserService as jest.Mock).mockResolvedValueOnce(null);
+    const spyOnUpdateUserService = jest.spyOn(userService, 'updateUserService').mockResolvedValueOnce(null);
 
     await updateUserController(mockRequest, mockResponse);
 
@@ -49,11 +48,14 @@ describe('updateUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'ID does not exist',
     });
+
+    // Restore the original function after the test
+    spyOnUpdateUserService.mockRestore();
   });
 
   it('should handle internal server error', async () => {
-    // Mock the updateUserService to throw an error
-    (updateUserService as jest.Mock).mockRejectedValueOnce(new Error('Internal Server Error'));
+    const mockError = new Error('Internal Server Error');
+    const spyOnUpdateUserService = jest.spyOn(userService, 'updateUserService').mockRejectedValueOnce(mockError);
 
     await updateUserController(mockRequest, mockResponse);
 
@@ -61,5 +63,8 @@ describe('updateUserController', () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       message: 'Internal Server Error',
     });
+
+    // Restore the original function after the test
+    spyOnUpdateUserService.mockRestore();
   });
 });
