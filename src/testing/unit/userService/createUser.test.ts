@@ -1,67 +1,45 @@
-// createUserService.test.ts
-import bcrypt from 'bcrypt';
+import * as bcrypt from 'bcrypt';
 import { createUserService } from '../../../services/userService';
-import * as userDao from '../../../dataAccessObject/userDao'; // Import the entire module
+import { createUserDao } from '../../../dataAccessObject/userDao';
 
-// Mock the data access object module
+jest.mock('bcrypt');
 jest.mock('../../../dataAccessObject/userDao');
 
+const mockCreateUserDao = createUserDao as jest.MockedFunction<typeof createUserDao>;
+
+const mockUser = { user_id: 1, user_email: 'test@example.com', user_name: 'testuser', is_deleted: 0 };
+
 describe('createUserService', () => {
-    beforeEach(() => {
-        jest.clearAllMocks();
-    });
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-    it('should create user successfully', async () => {
-        const username = 'testUser';
-        const email = 'test@example.com';
-        const password = 'password123';
+  it('should create user successfully', async () => {
+    // Mock createUserDao
+    mockCreateUserDao.mockResolvedValueOnce(mockUser);
 
-        // Mock the bcrypt hash function using spyOn
-        const bcryptSpy = jest.spyOn(bcrypt, 'hash') as jest.Mock;
-        bcryptSpy.mockResolvedValue('hashedPassword123');
+    // Mock bcrypt.hash to resolve immediately with a hashed password
+    (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashedPassword');
 
-        // Mock the createUserDao function from the userDao module
-        const createUserDaoSpy = jest.spyOn(userDao, 'createUserDao').mockResolvedValue({
-            user_id: 1,
-            user_name: username,
-            user_email: email,
-            user_pass: 'hashedPassword123',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            is_deleted: 0,
-        });
+    const result = await createUserService('testuser', 'test@example.com', 'password123');
 
-        const result = await createUserService(username, email, password);
+    expect(bcrypt.hash).toHaveBeenCalledWith('password123', 10);
+    expect(mockCreateUserDao).toHaveBeenCalledWith('testuser', 'test@example.com', 'hashedPassword');
+    expect(result).toEqual(mockUser);
+  });
 
-        expect(bcryptSpy).toHaveBeenCalledWith(password, 10);
-        expect(createUserDaoSpy).toHaveBeenCalledWith(username, email, 'hashedPassword123');
+  it('should handle an error from createUserDao', async () => {
+    const errorMessage = 'An error occurred in createUserDao';
+    mockCreateUserDao.mockRejectedValueOnce(new Error(errorMessage));
 
-        // Adjust the expected result based on your actual return value from createUserDao
-        expect(result).toEqual({
-            user_id: 1,
-            user_name: username,
-            user_email: email,
-            user_pass: 'hashedPassword123',
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-            is_deleted: 0,
-        });
-    });
+    // Mock bcrypt.hash to resolve immediately with a hashed password
+    (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashedPassword');
 
-    it('should handle error during user creation', async () => {
-        const username = 'testUser';
-        const email = 'test@example.com';
-        const password = 'password123';
+    await expect(createUserService('testuser', 'test@example.com', 'password123')).rejects.toThrow(errorMessage);
 
-        // Mock the bcrypt hash function using spyOn
-        const bcryptSpy = jest.spyOn(bcrypt, 'hash') as jest.Mock;
-        bcryptSpy.mockResolvedValue('hashedPassword123');
+    expect(bcrypt.hash).toHaveBeenCalledWith('password123', 10);
+    expect(mockCreateUserDao).toHaveBeenCalledWith('testuser', 'test@example.com', 'hashedPassword');
+  });
 
-        // Mock the createUserDao function from the userDao module
-        jest.spyOn(userDao, 'createUserDao').mockRejectedValueOnce(new Error('Some error during user creation'));
-
-        await expect(createUserService(username, email, password)).rejects.toThrow('Some error during user creation');
-    });
-
-    // Add more test cases as needed
+  // Add more test cases as needed
 });

@@ -1,4 +1,5 @@
 "use strict";
+// dist/testing/unit/userService/getAllUser.test.js
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -8,50 +9,35 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-// getAllUser.test.ts
-const userModel_1 = __importDefault(require("../../../models/userModel"));
-const userService_1 = require("../../../services/userService"); // Adjust the import path
-jest.mock('../../../models/userModel');
+// Import necessary modules and functions
+const userService_1 = require("../../../services/userService");
+const userDao_1 = require("../../../dataAccessObject/userDao");
+// Mock the userDao module
+jest.mock('../../../dataAccessObject/userDao');
+// Example user data for testing
 const mockUsers = [
-    {
-        user_id: 1,
-        user_email: 'user1@example.com',
-        user_name: 'user1',
-        user_pass: 'password1',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        is_deleted: 0,
-    },
-    {
-        user_id: 2,
-        user_email: 'user2@example.com',
-        user_name: 'user2',
-        user_pass: 'password2',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        is_deleted: 0,
-    },
+    { user_id: 1, user_email: 'test1@example.com', user_name: 'testuser1', is_deleted: 0 },
+    { user_id: 2, user_email: 'test2@example.com', user_name: 'testuser2', is_deleted: 0 },
+    // Add more mock data as needed
 ];
 describe('getAllUserService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
     it('should return all users successfully', () => __awaiter(void 0, void 0, void 0, function* () {
-        // Mock the implementation of User.findAll
-        userModel_1.default.findAll.mockResolvedValueOnce(mockUsers); // Replace mockUsers with your test data
+        // Mock the implementation of getAllUserDao
+        userDao_1.getAllUserDao.mockResolvedValueOnce(mockUsers);
         const result = yield (0, userService_1.getAllUserService)();
-        expect(userModel_1.default.findAll).toHaveBeenCalledTimes(1);
+        expect(userDao_1.getAllUserDao).toHaveBeenCalledTimes(1);
         expect(result).toEqual(mockUsers);
     }));
     it('should handle an error from getAllUserDao', () => __awaiter(void 0, void 0, void 0, function* () {
+        // Mock getAllUserDao to throw an error
         const errorMessage = 'An error occurred in getAllUserDao';
-        userModel_1.default.findAll.mockRejectedValueOnce(new Error(errorMessage));
+        userDao_1.getAllUserDao.mockRejectedValueOnce(new Error(errorMessage));
         yield expect((0, userService_1.getAllUserService)()).rejects.toThrow(errorMessage);
-        expect(userModel_1.default.findAll).toHaveBeenCalledTimes(1);
+        expect(userDao_1.getAllUserDao).toHaveBeenCalledTimes(1);
     }));
-    // Add a test case for handling an error from User.findAll if needed
+    // Add more test cases as needed
 });

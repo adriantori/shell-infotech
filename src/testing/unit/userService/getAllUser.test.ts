@@ -1,28 +1,17 @@
-// getAllUser.test.ts
-import User from '../../../models/userModel';
-import { getAllUserService } from '../../../services/userService';  // Adjust the import path
+// dist/testing/unit/userService/getAllUser.test.js
 
-jest.mock('../../../models/userModel');
+// Import necessary modules and functions
+import { getAllUserService } from '../../../services/userService';
+import { getAllUserDao } from '../../../dataAccessObject/userDao';
 
+// Mock the userDao module
+jest.mock('../../../dataAccessObject/userDao');
+
+// Example user data for testing
 const mockUsers = [
-  {
-    user_id: 1,
-    user_email: 'user1@example.com',
-    user_name: 'user1',
-    user_pass: 'password1',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    is_deleted: 0,
-  },
-  {
-    user_id: 2,
-    user_email: 'user2@example.com',
-    user_name: 'user2',
-    user_pass: 'password2',
-    createdAt: new Date(),
-    updatedAt: new Date(),
-    is_deleted: 0,
-  },
+  { user_id: 1, user_email: 'test1@example.com', user_name: 'testuser1', is_deleted: 0 },
+  { user_id: 2, user_email: 'test2@example.com', user_name: 'testuser2', is_deleted: 0 },
+  // Add more mock data as needed
 ];
 
 describe('getAllUserService', () => {
@@ -31,23 +20,24 @@ describe('getAllUserService', () => {
   });
 
   it('should return all users successfully', async () => {
-    // Mock the implementation of User.findAll
-    (User.findAll as jest.Mock).mockResolvedValueOnce(mockUsers); // Replace mockUsers with your test data
+    // Mock the implementation of getAllUserDao
+    (getAllUserDao as jest.MockedFunction<typeof getAllUserDao>).mockResolvedValueOnce(mockUsers);
 
     const result = await getAllUserService();
 
-    expect(User.findAll).toHaveBeenCalledTimes(1);
+    expect(getAllUserDao).toHaveBeenCalledTimes(1);
     expect(result).toEqual(mockUsers);
   });
 
   it('should handle an error from getAllUserDao', async () => {
+    // Mock getAllUserDao to throw an error
     const errorMessage = 'An error occurred in getAllUserDao';
-    (User.findAll as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
+    (getAllUserDao as jest.MockedFunction<typeof getAllUserDao>).mockRejectedValueOnce(new Error(errorMessage));
 
     await expect(getAllUserService()).rejects.toThrow(errorMessage);
 
-    expect(User.findAll).toHaveBeenCalledTimes(1);
+    expect(getAllUserDao).toHaveBeenCalledTimes(1);
   });
 
-  // Add a test case for handling an error from User.findAll if needed
+  // Add more test cases as needed
 });

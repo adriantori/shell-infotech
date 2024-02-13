@@ -1,0 +1,109 @@
+Summary of all failing tests
+ FAIL  dist/testing/unit/userService/createUser.test.js
+  ● createUserService › should create user successfully
+
+    TypeError: mockCreateUserDao.mockResolvedValueOnce is not a function
+
+      47 |     it('should create user successfully', () => __awaiter(void 0, void 0, void 0, function* () {
+      48 |         // Mock createUserDao
+    > 49 |         mockCreateUserDao.mockResolvedValueOnce(mockUser);
+         |                           ^
+      50 |         // Mock bcrypt.hash to resolve immediately with a hashed password
+      51 |         bcrypt.hash.mockResolvedValueOnce('hashedPassword');
+      52 |         const result = yield (0, userService_1.createUserService)('testuser', 'test@example.com', 'password123');
+
+      at mockResolvedValueOnce (dist/testing/unit/userService/createUser.test.js:49:27)
+      at next (dist/testing/unit/userService/createUser.test.js:31:71)
+      at Object.<anonymous>.__awaiter (dist/testing/unit/userService/createUser.test.js:27:12)
+      at Object.__awaiter (dist/testing/unit/userService/createUser.test.js:47:49)
+
+  ● createUserService › should handle an error from createUserDao
+
+    TypeError: mockCreateUserDao.mockRejectedValueOnce is not a function
+
+      57 |     it('should handle an error from createUserDao', () => __awaiter(void 0, void 0, void 0, function* () {
+      58 |         const errorMessage = 'An error occurred in createUserDao';
+    > 59 |         mockCreateUserDao.mockRejectedValueOnce(new Error(errorMessage));
+         |                           ^
+      60 |         // Mock bcrypt.hash to resolve immediately with a hashed password
+      61 |         bcrypt.hash.mockResolvedValueOnce('hashedPassword');
+      62 |         yield expect((0, userService_1.createUserService)('testuser', 'test@example.com', 'password123')).rejects.toThrow(errorMessage);
+
+      at mockRejectedValueOnce (dist/testing/unit/userService/createUser.test.js:59:27)
+      at next (dist/testing/unit/userService/createUser.test.js:31:71)
+      at Object.<anonymous>.__awaiter (dist/testing/unit/userService/createUser.test.js:27:12)
+      at Object.__awaiter (dist/testing/unit/userService/createUser.test.js:57:59)
+
+ FAIL  src/testing/unit/userService/updateUser.test.ts
+  ● updateUserService › should handle an error from updateUserDao
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "updatedUser", "updated@example.com", "hashedPassword123", 1
+    Received: "updatedUser", "updated@example.com", undefined, 1
+
+    Number of calls: 1
+
+      58 |
+      59 |     // Ensure that updateUserDao is called with the correct arguments, including the hashed password
+    > 60 |     expect(updateUserDao).toHaveBeenCalledWith('updatedUser', 'updated@example.com', 'hashedPassword123', 1);
+         |                           ^
+      61 |   });
+      62 |
+      63 |   // Add more test cases as needed
+
+      at Object.toHaveBeenCalledWith (src/testing/unit/userService/updateUser.test.ts:60:27)
+
+ FAIL  src/testing/unit/userService/createUser.test.ts
+  ● createUserService › should create user successfully
+
+    TypeError: mockCreateUserDao.mockResolvedValueOnce is not a function
+
+      18 |   it('should create user successfully', async () => {
+      19 |     // Mock createUserDao
+    > 20 |     mockCreateUserDao.mockResolvedValueOnce(mockUser);
+         |                       ^
+      21 |
+      22 |     // Mock bcrypt.hash to resolve immediately with a hashed password
+      23 |     (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashedPassword');
+
+      at Object.mockResolvedValueOnce (src/testing/unit/userService/createUser.test.ts:20:23)
+
+  ● createUserService › should handle an error from createUserDao
+
+    TypeError: mockCreateUserDao.mockRejectedValueOnce is not a function
+
+      32 |   it('should handle an error from createUserDao', async () => {
+      33 |     const errorMessage = 'An error occurred in createUserDao';
+    > 34 |     mockCreateUserDao.mockRejectedValueOnce(new Error(errorMessage));
+         |                       ^
+      35 |
+      36 |     // Mock bcrypt.hash to resolve immediately with a hashed password
+      37 |     (bcrypt.hash as jest.Mock).mockResolvedValueOnce('hashedPassword');
+
+      at Object.mockRejectedValueOnce (src/testing/unit/userService/createUser.test.ts:34:23)
+
+ FAIL  dist/testing/unit/userService/updateUser.test.js
+  ● updateUserService › should handle an error from updateUserDao
+
+    expect(jest.fn()).toHaveBeenCalledWith(...expected)
+
+    Expected: "updatedUser", "updated@example.com", "hashedPassword123", 1
+    Received: "updatedUser", "updated@example.com", undefined, 1
+
+    Number of calls: 1
+
+      55 |         expect(bcrypt_1.default.hash).toHaveBeenCalledWith('password123', 10);
+      56 |         // Ensure that updateUserDao is called with the correct arguments, including the hashed password
+    > 57 |         expect(userDao_1.updateUserDao).toHaveBeenCalledWith('updatedUser', 'updated@example.com', 'hashedPassword123', 1);
+         |                                         ^
+      58 |     }));
+      59 |     // Add more test cases as needed
+      60 | });
+
+      at toHaveBeenCalledWith (dist/testing/unit/userService/updateUser.test.js:57:41)
+      at next (dist/testing/unit/userService/updateUser.test.js:5:58)
+
+
+Test Suites: 4 failed, 32 passed, 36 total
+Tests:       6 failed, 84 passed, 90 total

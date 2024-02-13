@@ -31,61 +31,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-// createUserService.test.ts
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcrypt = __importStar(require("bcrypt"));
 const userService_1 = require("../../../services/userService");
-const userDao = __importStar(require("../../../dataAccessObject/userDao")); // Import the entire module
-// Mock the data access object module
+const userDao_1 = require("../../../dataAccessObject/userDao");
+jest.mock('bcrypt');
 jest.mock('../../../dataAccessObject/userDao');
+const mockCreateUserDao = userDao_1.createUserDao;
+const mockUser = { user_id: 1, user_email: 'test@example.com', user_name: 'testuser', is_deleted: 0 };
 describe('createUserService', () => {
     beforeEach(() => {
         jest.clearAllMocks();
     });
     it('should create user successfully', () => __awaiter(void 0, void 0, void 0, function* () {
-        const username = 'testUser';
-        const email = 'test@example.com';
-        const password = 'password123';
-        // Mock the bcrypt hash function using spyOn
-        const bcryptSpy = jest.spyOn(bcrypt_1.default, 'hash');
-        bcryptSpy.mockResolvedValue('hashedPassword123');
-        // Mock the createUserDao function from the userDao module
-        const createUserDaoSpy = jest.spyOn(userDao, 'createUserDao').mockResolvedValue({
-            user_id: 1,
-            user_name: username,
-            user_email: email,
-            user_pass: 'hashedPassword123',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            is_deleted: 0,
-        });
-        const result = yield (0, userService_1.createUserService)(username, email, password);
-        expect(bcryptSpy).toHaveBeenCalledWith(password, 10);
-        expect(createUserDaoSpy).toHaveBeenCalledWith(username, email, 'hashedPassword123');
-        // Adjust the expected result based on your actual return value from createUserDao
-        expect(result).toEqual({
-            user_id: 1,
-            user_name: username,
-            user_email: email,
-            user_pass: 'hashedPassword123',
-            createdAt: expect.any(Date),
-            updatedAt: expect.any(Date),
-            is_deleted: 0,
-        });
+        // Mock createUserDao
+        mockCreateUserDao.mockResolvedValueOnce(mockUser);
+        // Mock bcrypt.hash to resolve immediately with a hashed password
+        bcrypt.hash.mockResolvedValueOnce('hashedPassword');
+        const result = yield (0, userService_1.createUserService)('testuser', 'test@example.com', 'password123');
+        expect(bcrypt.hash).toHaveBeenCalledWith('password123', 10);
+        expect(mockCreateUserDao).toHaveBeenCalledWith('testuser', 'test@example.com', 'hashedPassword');
+        expect(result).toEqual(mockUser);
     }));
-    it('should handle error during user creation', () => __awaiter(void 0, void 0, void 0, function* () {
-        const username = 'testUser';
-        const email = 'test@example.com';
-        const password = 'password123';
-        // Mock the bcrypt hash function using spyOn
-        const bcryptSpy = jest.spyOn(bcrypt_1.default, 'hash');
-        bcryptSpy.mockResolvedValue('hashedPassword123');
-        // Mock the createUserDao function from the userDao module
-        jest.spyOn(userDao, 'createUserDao').mockRejectedValueOnce(new Error('Some error during user creation'));
-        yield expect((0, userService_1.createUserService)(username, email, password)).rejects.toThrow('Some error during user creation');
+    it('should handle an error from createUserDao', () => __awaiter(void 0, void 0, void 0, function* () {
+        const errorMessage = 'An error occurred in createUserDao';
+        mockCreateUserDao.mockRejectedValueOnce(new Error(errorMessage));
+        // Mock bcrypt.hash to resolve immediately with a hashed password
+        bcrypt.hash.mockResolvedValueOnce('hashedPassword');
+        yield expect((0, userService_1.createUserService)('testuser', 'test@example.com', 'password123')).rejects.toThrow(errorMessage);
+        expect(bcrypt.hash).toHaveBeenCalledWith('password123', 10);
+        expect(mockCreateUserDao).toHaveBeenCalledWith('testuser', 'test@example.com', 'hashedPassword');
     }));
     // Add more test cases as needed
 });

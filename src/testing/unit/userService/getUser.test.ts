@@ -1,20 +1,13 @@
 // Import necessary modules and functions
 import { getUserService } from '../../../services/userService';  // Adjust the import path
-import { getUserDao } from '../../../dataAccessObject/userDao'; // Import the entire module
+import * as userDaoModule from '../../../dataAccessObject/userDao'; // Import the entire module
 
 // Mock the userDao module
 jest.mock('../../../dataAccessObject/userDao');
+const { getUserDao } = userDaoModule; // Destructure the function from the module
 
 // Example user data for testing
-const mockUser = {
-  user_id: 1,
-  user_email: 'test@example.com',
-  user_name: 'testuser',
-  user_pass: 'testpassword',
-  createdAt: new Date(),
-  updatedAt: new Date(),
-  is_deleted: 0,
-};
+const mockUser = { user_id: 1, user_email: 'test@example.com', user_name: 'testuser', is_deleted: 0 };
 
 describe('getUserService', () => {
   beforeEach(() => {
@@ -25,13 +18,9 @@ describe('getUserService', () => {
     // Mock the implementation of getUserDao
     (getUserDao as jest.Mock).mockResolvedValueOnce(mockUser);
 
-    // Call the getUserService function
     const result = await getUserService(1);
 
-    // Check if getUserDao was called with the correct arguments
     expect(getUserDao).toHaveBeenCalledWith(1);
-
-    // Check if the result matches the expected user data
     expect(result).toEqual(mockUser);
   });
 
@@ -40,10 +29,8 @@ describe('getUserService', () => {
     const errorMessage = 'An error occurred in getUserDao';
     (getUserDao as jest.Mock).mockRejectedValueOnce(new Error(errorMessage));
 
-    // Call getUserService and expect it to throw an error
     await expect(getUserService(1)).rejects.toThrow(errorMessage);
 
-    // Check if getUserDao was called with the correct arguments
     expect(getUserDao).toHaveBeenCalledWith(1);
   });
 
