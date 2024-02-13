@@ -130,15 +130,21 @@ function undeleteUserDao(userId) {
     return __awaiter(this, void 0, void 0, function* () {
         const currentDate = new Date();
         try {
-            const user = yield userModel_1.default.update({
+            const [affectedRows] = yield userModel_1.default.update({
                 is_deleted: 0,
                 updatedAt: currentDate,
             }, {
                 where: {
-                    user_id: userId
-                }
+                    user_id: userId,
+                },
+                returning: true, // Include the updated rows in the result
             });
-            return user;
+            if (affectedRows > 0) {
+                return { is_deleted: 0, updatedAt: currentDate }; // Adjust the return value as needed
+            }
+            else {
+                throw new Error('No user undeleted');
+            }
         }
         catch (error) {
             throw new Error(error.message.replace('Validation error: ', ''));

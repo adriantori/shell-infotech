@@ -56,21 +56,21 @@ async function updateUserDao(username: string, email: string, password: string |
     try {
         const result = await User.update(
             {
-              user_name: username,
-              user_email: email,
-              user_pass: password,
-              updatedAt: currentDate,
+                user_name: username,
+                user_email: email,
+                user_pass: password,
+                updatedAt: currentDate,
             },
             {
-              where: {
-                is_deleted:  0,
-                user_id: userId,
-              },
-              returning: true,
+                where: {
+                    is_deleted: 0,
+                    user_id: userId,
+                },
+                returning: true,
             }
-          );
-          
-        if (result && Array.isArray(result) && result.length >  1 && result[1].length >  0) {
+        );
+
+        if (result && Array.isArray(result) && result.length > 1 && result[1].length > 0) {
             const user = result[1][0];
             return user;
         } else {
@@ -79,53 +79,59 @@ async function updateUserDao(username: string, email: string, password: string |
     } catch (error: any) {
         throw new Error(error.message.replace('Validation error: ', ''));
     }
-    
+
 }
 
 async function deleteUserDao(userId: number): Promise<any> {
-  const currentDate = new Date();
-  try {
-    const [affectedRows] = await User.update(
-      {
-        is_deleted: 1,
-        updatedAt: currentDate,
-      },
-      {
-        where: {
-          user_id: userId,
-        },
-        returning: true, // Include the updated rows in the result
-      } as UpdateOptions
-    );
-
-    if (affectedRows > 0) {
-      return { is_deleted: 1, updatedAt: currentDate }; // Adjust the return value as needed
-    } else {
-      throw new Error('No user deleted');
-    }
-  } catch (error: any) {
-    throw new Error(error.message.replace('Validation error: ', ''));
-  }
-}
-
-async function undeleteUserDao(userId: number): Promise<any> {
     const currentDate = new Date();
     try {
-        const user = await User.update({
-            is_deleted: 0,
-            updatedAt: currentDate,
-        },
+        const [affectedRows] = await User.update(
+            {
+                is_deleted: 1,
+                updatedAt: currentDate,
+            },
             {
                 where: {
-                    user_id: userId
-                }
-            });
+                    user_id: userId,
+                },
+                returning: true, // Include the updated rows in the result
+            } as UpdateOptions
+        );
 
-        return user;
+        if (affectedRows > 0) {
+            return { is_deleted: 1, updatedAt: currentDate }; // Adjust the return value as needed
+        } else {
+            throw new Error('No user deleted');
+        }
     } catch (error: any) {
         throw new Error(error.message.replace('Validation error: ', ''));
     }
 }
 
+async function undeleteUserDao(userId: number): Promise<any> {
+    const currentDate = new Date();
+    try {
+        const [affectedRows] = await User.update(
+            {
+                is_deleted: 0,
+                updatedAt: currentDate,
+            },
+            {
+                where: {
+                    user_id: userId,
+                },
+                returning: true, // Include the updated rows in the result
+            } as UpdateOptions
+        );
+
+        if (affectedRows > 0) {
+            return { is_deleted: 0, updatedAt: currentDate }; // Adjust the return value as needed
+        } else {
+            throw new Error('No user undeleted');
+        }
+    } catch (error: any) {
+        throw new Error(error.message.replace('Validation error: ', ''));
+    }
+}
 
 export { createUserDao, getAllUserDao, getUserDao, updateUserDao, deleteUserDao, undeleteUserDao }
