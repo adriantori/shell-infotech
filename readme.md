@@ -2,6 +2,8 @@
 
 Creating CRUD with all necessary objectives.
 
+Deployment Link: https://shell-infotech.vercel.app
+
 ## Features:
 
 1. Implementing 6 API end-points.
@@ -26,7 +28,7 @@ Creating CRUD with all necessary objectives.
 
 4. Postman to check the back-end formats & output.
 
-5. (optional) Git to pull the project (can download the files from github).
+5. (optional) Git to clone the project (can download the files from github).
 
 ## Installation & How to Run Project:
 
@@ -43,16 +45,16 @@ Creating CRUD with all necessary objectives.
 
 6. Import Shell Infotech.postman_collection.json to easily check the endpoints.
 
-## Migration:
+## Database Migration:
 
 1. Go to "src" folder and open terminal there.
 
-2. Run "npx sequelize-cli db:migrate"
+2. Run "npx sequelize-cli db:migrate".
 
 ### ---WARNING---
 
 If there's table already created, above code will not work and you have to revert the table using this command.
-This command **WILL DELETE ALL DATA AND TABLE**
+This command **WILL DELETE ALL DATA AND TABLE**.
 npx sequelize-cli db:migrate:undo:all
 
 ### ---WARNING---
@@ -61,8 +63,10 @@ npx sequelize-cli db:migrate:undo:all
 
 1. Go to "src" folder and open terminal there.
 
-2. run "npx sequelize-cli db:seed:all"
+2. run "npx sequelize-cli db:seed:all".
 
 ### Unit Testing :
+
+Run "npm test" to generate test coverage.
 
 ![Unit Testing Image](readme/readme/2024-02-13-18-49-31-image.png)
