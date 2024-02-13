@@ -12,7 +12,6 @@ If there's table already created, above code will not work and you have to rever
 This command **WILL DELETE ALL DATA AND TABLE**
 npx sequelize-cli db:migrate:undo:all
 
-
 seeding data
 cd src
 npx sequelize-cli db:seed:all
@@ -20,5 +19,5 @@ npx sequelize-cli db:seed:all
 running project
 go to project root directory (BACKEND), open terminal here
 type:
-npm run runs
+npm run dev
 
