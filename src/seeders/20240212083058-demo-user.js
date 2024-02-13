@@ -12,9 +12,9 @@ module.exports = {
       const hashedPassword = bcrypt.hashSync(password, 10);
 
       return {
-        username: casual.username,
-        email: casual.email,
-        password: hashedPassword,
+        user_name: casual.username,
+        user_email: casual.email,
+        user_pass: hashedPassword,
         createdAt: new Date(),
         updatedAt: new Date(),
       };
