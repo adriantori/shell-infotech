@@ -22,9 +22,6 @@ async function createUserDao(username: string, email: string, password: string):
 async function getAllUserDao(): Promise<any> {
     try {
         const users = await User.findAll({
-            where: {
-                is_deleted: 0
-            },
             order: [
                 ['user_id', 'ASC']
             ]

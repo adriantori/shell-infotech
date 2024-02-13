@@ -38,9 +38,6 @@ function getAllUserDao() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const users = yield userModel_1.default.findAll({
-                where: {
-                    is_deleted: 0
-                },
                 order: [
                     ['user_id', 'ASC']
                 ]

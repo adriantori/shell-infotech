@@ -50,9 +50,6 @@ describe('getAllUserDao', () => {
         jest.spyOn(userModel_1.default, 'findAll').mockResolvedValueOnce(mockUsers);
         const result = yield (0, userDao_1.getAllUserDao)();
         expect(userModel_1.default.findAll).toHaveBeenCalledWith({
-            where: {
-                is_deleted: 0,
-            },
             order: [
                 ['user_id', 'ASC'],
             ],
@@ -65,9 +62,6 @@ describe('getAllUserDao', () => {
         jest.spyOn(userModel_1.default, 'findAll').mockRejectedValueOnce(validationError);
         yield expect((0, userDao_1.getAllUserDao)()).rejects.toThrow('Some validation error message');
         expect(userModel_1.default.findAll).toHaveBeenCalledWith({
-            where: {
-                is_deleted: 0,
-            },
             order: [
                 ['user_id', 'ASC'],
             ],

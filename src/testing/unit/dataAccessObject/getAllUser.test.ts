@@ -52,9 +52,6 @@ describe('getAllUserDao', () => {
     const result = await getAllUserDao();
 
     expect(User.findAll).toHaveBeenCalledWith({
-      where: {
-        is_deleted: 0,
-      },
       order: [
         ['user_id', 'ASC'],
       ],
@@ -71,9 +68,6 @@ describe('getAllUserDao', () => {
     await expect(getAllUserDao()).rejects.toThrow('Some validation error message');
 
     expect(User.findAll).toHaveBeenCalledWith({
-      where: {
-        is_deleted: 0,
-      },
       order: [
         ['user_id', 'ASC'],
       ],
