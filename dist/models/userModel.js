@@ -51,6 +51,14 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
+    createdAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true, // You can set allowNull based on your requirements
+    },
+    updatedAt: {
+        type: sequelize_1.DataTypes.DATE,
+        allowNull: true, // You can set allowNull based on your requirements
+    },
 }, {
     sequelize: database_1.sequelize,
     modelName: 'User',

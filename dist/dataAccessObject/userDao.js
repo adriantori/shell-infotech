@@ -16,11 +16,14 @@ exports.createUserDao = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 function createUserDao(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
+        const currentDate = new Date();
         try {
             const user = yield userModel_1.default.create({
                 user_name: username,
                 user_email: email,
                 user_pass: password,
+                createdAt: currentDate,
+                updatedAt: currentDate,
             });
             return user;
         }

@@ -15,7 +15,7 @@ function createUserController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { username, email, password } = req.body;
         try {
-            const user = yield (0, userService_1.createUserService)(email, username, password);
+            const user = yield (0, userService_1.createUserService)(username, email, password);
             if (user) {
                 res.status(201).json({
                     message: 'Create User success',

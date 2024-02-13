@@ -7,7 +7,7 @@ async function createUserController(req: Request, res: Response) {
 
   try {
 
-      const user = await createUserService(email, username, password);
+      const user = await createUserService( username, email, password);
 
       if (user) {
           res.status(201).json({

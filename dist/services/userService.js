@@ -15,11 +15,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.createUserService = void 0;
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const userDao_1 = require("../dataAccessObject/userDao");
-function createUserService(email, username, password) {
+function createUserService(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const hashedPassword = yield bcrypt_1.default.hash(password, 10);
-            const user = yield (0, userDao_1.createUserDao)(email, username, hashedPassword);
+            const user = yield (0, userDao_1.createUserDao)(username, email, hashedPassword);
             return user;
         }
         catch (error) {
