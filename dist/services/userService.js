@@ -31,9 +31,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.undeleteUserService = exports.deleteUserService = exports.updateUserService = exports.getUserService = exports.getAllUserService = exports.createUserService = void 0;
 const bcrypt = __importStar(require("bcrypt"));
+const memory_cache_1 = __importDefault(require("memory-cache"));
 const userDao_1 = require("../dataAccessObject/userDao");
 function createUserService(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -48,10 +52,20 @@ function createUserService(username, email, password) {
     });
 }
 exports.createUserService = createUserService;
-function getAllUserService() {
+function getAllUserService(useCache = true) {
     return __awaiter(this, void 0, void 0, function* () {
+        const CACHE_KEY = 'allUsers';
         try {
+            if (useCache) {
+                const cachedUsers = memory_cache_1.default.get(CACHE_KEY);
+                if (cachedUsers) {
+                    console.log('Returning cached users');
+                    return cachedUsers;
+                }
+            }
             const users = yield (0, userDao_1.getAllUserDao)();
+            // Cache the result for future calls
+            memory_cache_1.default.put(CACHE_KEY, users, 60000); // Cache for 1 minute
             return users;
         }
         catch (error) {
