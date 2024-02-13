@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserDao = exports.createUserDao = void 0;
+exports.getUserDao = exports.getAllUserDao = exports.createUserDao = void 0;
 const userModel_1 = __importDefault(require("../models/userModel"));
 function createUserDao(username, email, password) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -38,9 +38,27 @@ function getAllUserDao() {
     return __awaiter(this, void 0, void 0, function* () {
         const currentDate = new Date();
         try {
+            const users = yield userModel_1.default.findAll({
+                where: {
+                    is_deleted: 0
+                }
+            });
+            return users;
+        }
+        catch (error) {
+            throw new Error(error.message.replace('Validation error: ', ''));
+        }
+    });
+}
+exports.getAllUserDao = getAllUserDao;
+function getUserDao(userId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const currentDate = new Date();
+        try {
             const user = yield userModel_1.default.findAll({
                 where: {
                     is_deleted: 0,
+                    user_id: userId
                 }
             });
             return user;
@@ -50,4 +68,4 @@ function getAllUserDao() {
         }
     });
 }
-exports.getAllUserDao = getAllUserDao;
+exports.getUserDao = getUserDao;

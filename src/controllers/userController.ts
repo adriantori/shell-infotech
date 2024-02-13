@@ -1,6 +1,6 @@
 import { Request, Response } from "express"
 
-import { createUserService, getAllUserService } from "../services/userService";
+import { createUserService, getAllUserService, getUserService } from "../services/userService";
 
 async function createUserController(req: Request, res: Response) {
   const { username, email, password } = req.body;
@@ -32,7 +32,7 @@ async function getAllUserController(req: Request, res: Response) {
     res.status(200).json({
       message: 'Users retrieved successfully',
       data: users,
-  });
+    });
   } catch (error: any) {
     res.status(500).json({
       message: error.message
@@ -41,7 +41,25 @@ async function getAllUserController(req: Request, res: Response) {
 }
 
 async function getUserByIdController(req: Request, res: Response) {
-  res.send(`get id ${req.params.id}`)
+  const userId = req.params.id
+  try {
+    const user = await getUserService(parseInt(userId));
+    console.log(user.length)
+    if (user.length > 0) {
+      res.status(200).json({
+        message: 'User retrieved successfully',
+        data: user,
+      });
+    } else {
+      res.status(200).json({
+        message: 'User does not exist'
+      });
+    };
+  } catch (error: any) {
+    res.status(500).json({
+      message: error.message
+    });
+  }
 }
 
 async function updateUserController(req: Request, res: Response) {

@@ -56,7 +56,28 @@ function getAllUserController(req, res) {
 exports.getAllUserController = getAllUserController;
 function getUserByIdController(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        res.send(`get id ${req.params.id}`);
+        const userId = req.params.id;
+        try {
+            const user = yield (0, userService_1.getUserService)(parseInt(userId));
+            console.log(user.length);
+            if (user.length > 0) {
+                res.status(200).json({
+                    message: 'User retrieved successfully',
+                    data: user,
+                });
+            }
+            else {
+                res.status(200).json({
+                    message: 'User does not exist'
+                });
+            }
+            ;
+        }
+        catch (error) {
+            res.status(500).json({
+                message: error.message
+            });
+        }
     });
 }
 exports.getUserByIdController = getUserByIdController;

@@ -18,12 +18,29 @@ async function createUserDao( username: string, email: string, password: string)
       throw new Error(error.message.replace('Validation error: ', ''));
   }
 }
+
 async function getAllUserDao(): Promise<any> {
+    const currentDate = new Date();
+  try {
+      const users = await User.findAll({
+        where: {
+            is_deleted: 0
+        }
+      });
+
+      return users;
+  } catch (error: any) {
+      throw new Error(error.message.replace('Validation error: ', ''));
+  }
+}
+
+async function getUserDao(userId: number): Promise<any> {
     const currentDate = new Date();
   try {
       const user = await User.findAll({
         where: {
             is_deleted: 0,
+            user_id: userId
         }
       });
 
@@ -34,4 +51,4 @@ async function getAllUserDao(): Promise<any> {
 }
 
 
-export { createUserDao, getAllUserDao }
+export { createUserDao, getAllUserDao, getUserDao }
