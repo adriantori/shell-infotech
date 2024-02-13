@@ -1,0 +1,151 @@
+{
+	"info": {
+		"_postman_id": "a78615aa-bbb7-4fc5-8a0b-e4b596bff494",
+		"name": "Shell Infotech",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17072252"
+	},
+	"item": [
+		{
+			"name": "Test Connection",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Data",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/getAll",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"getAll"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User By Id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/getId/1",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"getId",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create User",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"testing3\",\r\n    \"email\":\"testing@email.com\",\r\n    \"password\":\"testing123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/createUser",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update User",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"testingupdated\",\r\n    \"email\":\"testing@email.com\",\r\n    \"password\":\"testing123\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/updateUser/1",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"updateUser",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/deleteUser/1",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"deleteUser",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Undelete User",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"url": {
+					"raw": "https://shell-infotech.vercel.app/undeleteUser/1",
+					"host": [
+						"https://shell-infotech.vercel.app"
+					],
+					"path": [
+						"undeleteUser",
+						"1"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
