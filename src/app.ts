@@ -4,6 +4,7 @@ import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
 
 import { PORT } from './config/constants';
+import helmet from './middlewares/helmet';
 
 import { examRoute } from './routes/examRoute';
 
@@ -11,6 +12,7 @@ const app = express();
 const port: number = parseInt(PORT!) || 5000;
 
 app.use(bodyParser.json());
+app.use(helmet);
 
 // check if app works
 app.get('/', (req: Request, res: Response) => {
