@@ -4,6 +4,8 @@ Creating CRUD with all necessary objectives.
 
 Deployment Link: https://shell-infotech.vercel.app
 
+*note: I dont use /API/v1/ route format to simplify access & testing*
+
 ## Features:
 
 1. Implementing 6 API end-points.
@@ -61,16 +63,88 @@ npx sequelize-cli db:migrate:undo:all
 
 ### ---WARNING---
 
-## Seeding Data
+## Seeding Data:
 
 1. Go to "src" folder and open terminal there.
 
 2. run "npx sequelize-cli db:seed:all".
 
-### Unit Testing :
+## Unit Testing:
 
 Run "npm test" to generate test coverage.
 
 *note: makes sure to have internet connection*
 
 ![](readme/readme/2024-02-14-07-27-05-image.png)
+
+
+
+## API Explanation:
+
+### Test Connection:
+
+**get('/')** ,
+
+returns "Hello, Express!" to makes sure the app runs perfectly.
+
+### Get All Data:
+
+**get('/getAll')**, 
+
+getting all the data from database, both available and deleted users.
+
+### Get User By Id:
+
+**get('getId/:id')**, 
+
+getting data only that user. will return "User does not exist" if its in is_deleted state.
+
+### Create User:
+
+**post('/createUser')**,
+
+insert new User data to database.
+
+JSON body example:
+
+```json
+{
+    "username":"testing",
+    "email":"testing@email.com",
+    "password":"testing123"
+}
+```
+
+### Update User:
+
+**patch('updateUser/:id')**
+
+update partial data of User, this partial data can be one of, or all data in JSON body example.
+
+JSON body example:
+
+```json
+{
+    "username":"testingupdated",
+    "email":"testing@email.com",
+    "password":"testing123"
+}
+```
+
+### Delete User:
+
+**delete('/deleteUser/:id')**
+
+soft-delete User data by changing "is_deleted" attribute.
+
+### Undelete User:
+
+patch('undeleteUser/:id')
+
+restore User by changing "is_deleted" attribute.
+
+
+
+## Database Structure:
+
+![](readme/readme/2024-02-14-07-43-52-image.png)
