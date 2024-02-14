@@ -5,12 +5,16 @@ import whitelist from "../middlewares/whitelist";
 
 
 export const examRoute = Router();
+examRoute.post('/createUser', cors(whitelist.clientOptionsGlobal));
+examRoute.get('/getAll', cors(whitelist.clientOptionsGlobal));
+examRoute.get('/getId/:id', cors(whitelist.clientOptionsGlobal));
+examRoute.patch('/updateUser/:id', cors(whitelist.clientOptionsGlobal));
+examRoute.delete('/deleteUser/:id', cors(whitelist.clientOptionsGlobal));
+examRoute.patch('/undeleteUser/:id', cors(whitelist.clientOptionsGlobal));
 
-// examRoute.options('/getAll', cors(whitelist.clientOptionsGlobal));
-
-examRoute.post('/createUser', createUserController);
-examRoute.get('/getAll', getAllUserController);
-examRoute.get('/getId/:id', getUserByIdController);
-examRoute.patch('/updateUser/:id', updateUserController);
-examRoute.delete('/deleteUser/:id', deleteUserController);
-examRoute.patch('/undeleteUser/:id', undeleteUserController);
+examRoute.post('/createUser', cors(whitelist.clientOptionsGlobal), createUserController);
+examRoute.get('/getAll', cors(whitelist.clientOptionsGlobal), getAllUserController);
+examRoute.get('/getId/:id', cors(whitelist.clientOptionsGlobal), getUserByIdController);
+examRoute.patch('/updateUser/:id', cors(whitelist.clientOptionsGlobal), updateUserController);
+examRoute.delete('/deleteUser/:id', cors(whitelist.clientOptionsGlobal), deleteUserController);
+examRoute.patch('/undeleteUser/:id', cors(whitelist.clientOptionsGlobal), undeleteUserController);
