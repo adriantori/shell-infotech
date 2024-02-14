@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const path_1 = __importDefault(require("path"));
 const constants_1 = require("./config/constants");
 const middlewares_1 = __importDefault(require("./middlewares"));
 const examRoute_1 = require("./routes/examRoute");
@@ -15,6 +16,7 @@ const port = parseInt(constants_1.PORT) || 5000;
 app.get('/', (req, res) => {
     res.send('Hello, Express!');
 });
+app.use('/coverage', express_1.default.static(path_1.default.join(__dirname, '../coverage')));
 app.use(examRoute_1.examRoute);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);

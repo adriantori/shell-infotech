@@ -1,6 +1,7 @@
 // app.ts
 
 import express, { Request, Response } from 'express';
+import path from 'path';
 
 import { PORT } from './config/constants';
 import globalMiddleware from './middlewares'
@@ -16,6 +17,8 @@ globalMiddleware(app);
 app.get('/', (req: Request, res: Response) => {
   res.send('Hello, Express!');
 });
+
+app.use('/coverage', express.static(path.join(__dirname, '../coverage')));
 
 app.use(examRoute);
 
