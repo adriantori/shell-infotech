@@ -18,6 +18,8 @@ Deployment Link: https://shell-infotech.vercel.app
 
 6. Using Sequelize and PostgreSQL complete with database migration and seeding using Casual library.
 
+7. Used Memory Caching at getAllData Service to saves resources.
+
 ## Requirement to Run This Locally:
 
 1. PC and its equivalent.
@@ -69,4 +71,6 @@ npx sequelize-cli db:migrate:undo:all
 
 Run "npm test" to generate test coverage.
 
-![Unit Testing Image](readme/readme/2024-02-13-18-49-31-image.png)
+*note: makes sure to have internet connection*
+
+![](readme/readme/2024-02-14-07-27-05-image.png)

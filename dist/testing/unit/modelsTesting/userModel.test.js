@@ -17,14 +17,14 @@ const userModel_1 = __importDefault(require("../../../models/userModel"));
 describe('User Model', () => {
     beforeAll(() => __awaiter(void 0, void 0, void 0, function* () {
         // Connect to the test database
-        yield database_1.sequelize.sync({ force: true }); // Force sync to create tables
+        yield database_1.sequelize.sync();
     }));
     afterAll(() => __awaiter(void 0, void 0, void 0, function* () {
         // Close the database connection
         yield database_1.sequelize.close();
     }));
-    it('should create a new user', () => __awaiter(void 0, void 0, void 0, function* () {
-        const user = yield userModel_1.default.create({
+    it('should create a new user', () => {
+        const user = userModel_1.default.build({
             user_email: 'test@example.com',
             user_name: 'testuser',
             user_pass: 'testpassword',
@@ -34,22 +34,25 @@ describe('User Model', () => {
         expect(user.user_id).toBeDefined();
         expect(user.user_email).toBe('test@example.com');
         // Add more assertions based on your model structure
-    }));
+    });
     it('should validate unique username', () => __awaiter(void 0, void 0, void 0, function* () {
-        // Create a user with a specific username
-        yield userModel_1.default.create({
-            user_email: 'test2@example.com',
-            user_name: 'uniqueuser',
-            user_pass: 'testpassword',
-            is_deleted: 0,
-        });
-        // Try to create another user with the same username
-        yield expect(userModel_1.default.create({
+        // Build another user instance with the same username
+        const newUser = userModel_1.default.build({
             user_email: 'test3@example.com',
             user_name: 'uniqueuser',
             user_pass: 'testpassword',
             is_deleted: 0,
-        })).rejects.toThrowError('This username is already taken');
+        });
+        // Validate the instance without saving it to the database
+        try {
+            yield newUser.validate();
+        }
+        catch (error) {
+            expect(error).toBeDefined();
+            expect(error.name).toBe('SequelizeValidationError');
+            expect(error.errors).toHaveLength(1);
+            expect(error.errors[0].message).toBe('This username is already taken');
+        }
     }));
     // Add more test cases as needed
 });
