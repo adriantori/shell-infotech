@@ -4,6 +4,8 @@ Creating CRUD with all necessary objectives.
 
 Deployment Link: https://shell-infotech.vercel.app
 
+Test Case Report: [Code coverage report for All files](https://shell-infotech.vercel.app/coverage/lcov-report/index.html)
+
 *note: I dont use /API/v1/ route format to simplify access & testing*
 
 ## Features:
